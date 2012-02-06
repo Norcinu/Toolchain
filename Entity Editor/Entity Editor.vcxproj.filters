@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="..\Shared\Framework.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\AppImpl.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="AppUtilities.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Visualisation.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="FileOperations.h">
+      <Filter>File operations</Filter>
+    </ClInclude>
+    <ClInclude Include="FilePolicies.h">
+      <Filter>File operations</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Application">
+      <UniqueIdentifier>{772357d7-ca77-4bdd-8507-a37a8903f948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{e85e4832-2cd2-4d20-87e8-04d3a55f25ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{3eca003b-7e3a-4225-b513-c57d463d1ee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{c05cdafb-030b-4eb9-aa99-66630fa49975}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File operations">
+      <UniqueIdentifier>{e272be18-619a-4bda-8e96-ed50361fec2b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Shared\Framework.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="..\Shared\AppImpl.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Visualisation.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="FilePolicies.cpp">
+      <Filter>File operations</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
