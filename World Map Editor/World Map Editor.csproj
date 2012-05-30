@@ -46,16 +46,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmBitmapDisplay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmBitmapDisplay.Designer.cs">
+      <DependentUpon>frmBitmapDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmMapConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMapConfig.Designer.cs">
+      <DependentUpon>frmMapConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MapInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmBitmapDisplay.resx">
+      <DependentUpon>frmBitmapDisplay.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMapConfig.resx">
+      <DependentUpon>frmMapConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
