@@ -34,13 +34,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtMapName = new System.Windows.Forms.TextBox();
+            this.txtMapX = new System.Windows.Forms.TextBox();
+            this.txtSpriteX = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.txtSpriteY = new System.Windows.Forms.TextBox();
+            this.txtMapY = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -93,32 +93,32 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Sprite Dimensions x,y";
             // 
-            // textBox1
+            // txtMapName
             // 
-            this.textBox1.Location = new System.Drawing.Point(16, 41);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(104, 23);
-            this.textBox1.TabIndex = 5;
-            this.textBox1.Validating += new System.ComponentModel.CancelEventHandler(this.textBox1_Validating);
-            this.textBox1.Validated += new System.EventHandler(this.textBox1_Validated);
+            this.txtMapName.Location = new System.Drawing.Point(16, 41);
+            this.txtMapName.Name = "txtMapName";
+            this.txtMapName.Size = new System.Drawing.Size(104, 23);
+            this.txtMapName.TabIndex = 5;
+            this.txtMapName.Validating += new System.ComponentModel.CancelEventHandler(this.textBox1_Validating);
+            this.txtMapName.Validated += new System.EventHandler(this.textBox1_Validated);
             // 
-            // textBox2
+            // txtMapX
             // 
-            this.textBox2.Location = new System.Drawing.Point(17, 87);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(40, 23);
-            this.textBox2.TabIndex = 6;
-            this.textBox2.Validating += new System.ComponentModel.CancelEventHandler(this.textBox2_Validating);
-            this.textBox2.Validated += new System.EventHandler(this.textBox2_Validated);
+            this.txtMapX.Location = new System.Drawing.Point(17, 87);
+            this.txtMapX.Name = "txtMapX";
+            this.txtMapX.Size = new System.Drawing.Size(40, 23);
+            this.txtMapX.TabIndex = 6;
+            this.txtMapX.Validating += new System.ComponentModel.CancelEventHandler(this.textBox2_Validating);
+            this.txtMapX.Validated += new System.EventHandler(this.textBox2_Validated);
             // 
-            // textBox3
+            // txtSpriteX
             // 
-            this.textBox3.Location = new System.Drawing.Point(17, 142);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(40, 23);
-            this.textBox3.TabIndex = 7;
-            this.textBox3.Validating += new System.ComponentModel.CancelEventHandler(this.textBox3_Validating);
-            this.textBox3.Validated += new System.EventHandler(this.textBox3_Validated);
+            this.txtSpriteX.Location = new System.Drawing.Point(17, 142);
+            this.txtSpriteX.Name = "txtSpriteX";
+            this.txtSpriteX.Size = new System.Drawing.Size(40, 23);
+            this.txtSpriteX.TabIndex = 7;
+            this.txtSpriteX.Validating += new System.ComponentModel.CancelEventHandler(this.textBox3_Validating);
+            this.txtSpriteX.Validated += new System.EventHandler(this.textBox3_Validated);
             // 
             // button1
             // 
@@ -133,35 +133,35 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // textBox4
+            // txtSpriteY
             // 
-            this.textBox4.Location = new System.Drawing.Point(80, 142);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(40, 23);
-            this.textBox4.TabIndex = 9;
-            this.textBox4.Validating += new System.ComponentModel.CancelEventHandler(this.textBox4_Validating);
-            this.textBox4.Validated += new System.EventHandler(this.textBox4_Validated);
+            this.txtSpriteY.Location = new System.Drawing.Point(80, 142);
+            this.txtSpriteY.Name = "txtSpriteY";
+            this.txtSpriteY.Size = new System.Drawing.Size(40, 23);
+            this.txtSpriteY.TabIndex = 9;
+            this.txtSpriteY.Validating += new System.ComponentModel.CancelEventHandler(this.textBox4_Validating);
+            this.txtSpriteY.Validated += new System.EventHandler(this.textBox4_Validated);
             // 
-            // textBox5
+            // txtMapY
             // 
-            this.textBox5.Location = new System.Drawing.Point(80, 87);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(40, 23);
-            this.textBox5.TabIndex = 10;
-            this.textBox5.Validating += new System.ComponentModel.CancelEventHandler(this.textBox5_Validating);
-            this.textBox5.Validated += new System.EventHandler(this.textBox5_Validated);
+            this.txtMapY.Location = new System.Drawing.Point(80, 87);
+            this.txtMapY.Name = "txtMapY";
+            this.txtMapY.Size = new System.Drawing.Size(40, 23);
+            this.txtMapY.TabIndex = 10;
+            this.txtMapY.Validating += new System.ComponentModel.CancelEventHandler(this.textBox5_Validating);
+            this.txtMapY.Validated += new System.EventHandler(this.textBox5_Validated);
             // 
             // frmMapConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(246, 230);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.txtMapY);
+            this.Controls.Add(this.txtSpriteY);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtSpriteX);
+            this.Controls.Add(this.txtMapX);
+            this.Controls.Add(this.txtMapName);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -170,6 +170,7 @@
             this.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "frmMapConfig";
             this.Text = "Map Settings";
+            this.Load += new System.EventHandler(this.frmMapConfig_Load);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -183,13 +184,13 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtMapName;
+        private System.Windows.Forms.TextBox txtMapX;
+        private System.Windows.Forms.TextBox txtSpriteX;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ErrorProvider errorProvider1;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txtMapY;
+        private System.Windows.Forms.TextBox txtSpriteY;
 
     }
 }

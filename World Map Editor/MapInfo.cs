@@ -6,10 +6,10 @@ using System.Drawing;
 
 namespace World_Map_Editor
 {
-    class MapInfo
+    public class MapInfo
     {
-        public Point mapDimensions;
-        public Point spriteDimensions;
+        public Size mapDimensions;
+        public Size spriteDimensions;
         public int numSpritesWide;
         public int numSpritesHigh;
         public string mapName;

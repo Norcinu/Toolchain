@@ -1,0 +1,10 @@
+C:\Users\Steven\documents\visual studio 2010\Projects\Toolchain\World Map Editor\bin\Debug\World Map Editor.exe
+C:\Users\Steven\documents\visual studio 2010\Projects\Toolchain\World Map Editor\bin\Debug\World Map Editor.pdb
+C:\Users\Steven\documents\visual studio 2010\Projects\Toolchain\World Map Editor\obj\x86\Debug\World_Map_Editor.frmMain.resources
+C:\Users\Steven\documents\visual studio 2010\Projects\Toolchain\World Map Editor\obj\x86\Debug\World_Map_Editor.Properties.Resources.resources
+C:\Users\Steven\documents\visual studio 2010\Projects\Toolchain\World Map Editor\obj\x86\Debug\World Map Editor.exe
+C:\Users\Steven\documents\visual studio 2010\Projects\Toolchain\World Map Editor\obj\x86\Debug\World Map Editor.pdb
+C:\Users\Steven\documents\visual studio 2010\Projects\Toolchain\World Map Editor\obj\x86\Debug\World Map Editor.csproj.GenerateResource.Cache
+C:\Users\Steven\documents\visual studio 2010\Projects\Toolchain\World Map Editor\obj\x86\Debug\World Map Editor.csprojResolveAssemblyReference.cache
+C:\Users\Steven\documents\visual studio 2010\Projects\Toolchain\World Map Editor\obj\x86\Debug\World_Map_Editor.frmBitmapDisplay.resources
+C:\Users\Steven\documents\visual studio 2010\Projects\Toolchain\World Map Editor\obj\x86\Debug\World_Map_Editor.frmMapConfig.resources

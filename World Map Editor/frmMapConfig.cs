@@ -1,26 +1,44 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace World_Map_Editor
 {
     public partial class frmMapConfig : Form
     {
+        private MapInfo map;
+        public MapInfo Map
+        {
+            get { return map; }
+            set { map = value; }
+        }
+
         public frmMapConfig()
         {
             InitializeComponent();
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+            map = new MapInfo();
         }
 
-        private void btnOK_Click( object sender, EventArgs e )
+        private void btnOK_Click(object sender, EventArgs e)
         {
             if (this.ValidateChildren(ValidationConstraints.Enabled))
             {
+                map.mapName = txtMapName.Text;
+                map.mapDimensions.Width = Convert.ToInt32(txtMapX.Text);
+                map.mapDimensions.Height = Convert.ToInt32(txtMapY.Text);
+                map.spriteDimensions.Width = Convert.ToInt32(txtSpriteX.Text);
+                map.spriteDimensions.Height = Convert.ToInt32(txtSpriteY.Text);
+                map.numSpritesHigh = map.mapDimensions.Height / map.spriteDimensions.Height;
+                map.numSpritesWide = map.mapDimensions.Width / map.spriteDimensions.Width;
 
+                this.Close();
             }
             else
             {
-                MessageBox.Show("invalid");
+                MessageBox.Show("Please enter valid inputs.", "Input Error", MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -34,13 +52,11 @@ namespace World_Map_Editor
         {
             bool cancel = false;
             int result = -1;
-            if (!string.IsNullOrEmpty(this.textBox2.Text))
+            if (!string.IsNullOrEmpty(this.txtMapX.Text))
             {
-                if (int.TryParse(this.textBox2.Text, out result))
-                    Console.WriteLine("result is " + result);
-                else
+                if (!int.TryParse(this.txtMapX.Text, out result))
                 {
-                    Console.WriteLine("***result is " + result);
+                    //Console.WriteLine("***result is " + result);
                     cancel = true;
                 }
             }
@@ -57,10 +73,10 @@ namespace World_Map_Editor
         private void CheckNumbers(CancelEventArgs e)
         {
             bool cancel = false;
-            if (string.IsNullOrEmpty(this.textBox2.Text))
+            if (string.IsNullOrEmpty(this.txtMapX.Text))
             {
                 string[] words;
-                words = this.textBox2.Text.Split(',');
+                words = this.txtMapX.Text.Split(',');
                 foreach (string s in words)
                 {
                     int val = 0;
@@ -79,12 +95,12 @@ namespace World_Map_Editor
 
         private void textBox2_Validated(object sender, EventArgs e)
         {
-            this.errorProvider1.SetError(this.textBox2, string.Empty);
+            this.errorProvider1.SetError(this.txtMapX, string.Empty);
         }
 
         private void textBox5_Validating(object sender, CancelEventArgs e)
         {
-            ResetErrors(sender);
+            CheckValidNumber(sender, e);
         }
 
         private void ResetErrors(object sender)
@@ -94,19 +110,27 @@ namespace World_Map_Editor
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            textBox1.Text = "";
-            textBox2.Text = "";
-            textBox3.Text = "";
-            textBox4.Text = "";
-            textBox5.Text = "";
+            txtMapName.Text = "";
+            txtMapX.Text = "";
+            txtSpriteX.Text = "";
+            txtSpriteY.Text = "";
+            txtMapY.Text = "";
+            
+            map.mapName = "";
+            map.mapDimensions = new Size(0, 0);
+            map.spriteDimensions = new Size(0, 0);
+            map.numSpritesHigh = 0;
+            map.numSpritesWide = 0;
+            
+            this.errorProvider1.Clear();
         }
 
         private void textBox1_Validating(object sender, CancelEventArgs e)
         {
-            if (string.IsNullOrEmpty(textBox1.Text) || string.IsNullOrWhiteSpace(textBox1.Text))
+            if (string.IsNullOrEmpty(txtMapName.Text) || string.IsNullOrWhiteSpace(txtMapName.Text))
             {
                 e.Cancel = true;
-                errorProvider1.SetError(textBox1, "Enter a valid string.");
+                errorProvider1.SetError(txtMapName, "Enter a valid string.");
             }
         }
 
@@ -138,6 +162,11 @@ namespace World_Map_Editor
         private void textBox4_Validated(object sender, EventArgs e)
         {
             ResetErrors(sender);
+        }
+
+        private void frmMapConfig_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
