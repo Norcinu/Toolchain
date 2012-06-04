@@ -19,7 +19,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     
     std::vector<Entity*> ents;
     TextFileAppend test;
-    test.Run("cunt.txt", ents);
+    test.Run("test.txt", ents);
     
     return 0;
 }
