@@ -26,7 +26,8 @@ private:
 	bool  OnEvent(UINT msg, WPARAM wParam, LPARAM lParam);
     void  OpenFileDialog();
     void  OnInit(HWND wnd, CREATESTRUCT * cs);
-    void SetControlFont( HWND font_control, int points, const char * font_name, bool is_bold=false );
+    void  SetControlFont(HWND font_control, int points, const char * font_name, 
+		bool is_bold=false);
     void  OnUpdate(float time);
 
 private:

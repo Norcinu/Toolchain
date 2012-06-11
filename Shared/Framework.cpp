@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ShObjIdl.h>
 
+#include "../Entity Editor/AboutDialog.h"
 //#define _WIN32_WINNT 0x0700
 
 bool ApplicationFramework::Init()
@@ -96,9 +97,11 @@ bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case ID_FILE_OPEN40007:
         OpenFileDialog();
-
         break;
 		//MessageBox(NULL, "CUNT", "CUNT", MB_OK);
+	case ID_HELP_ABOUT:
+		DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG1), this->wnd_,
+			AboutDialog::AboutDialogProc);
 	}
 
 	/*switch(msg)
@@ -121,14 +124,16 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
     HWND group_box = app_helper::CreateButton(wnd, cs->hInstance, BS_GROUPBOX|BS_CENTER, 
         grp_box_pos, IDC_GROUP_BOX, ("Entity Controls"));
     
-
-    HWND list_box = app_helper::CreateListbox(wnd, cs->hInstance, 0, ent_list_pos, IDCL_LISTBOX, (""));
-    app_helper::AddString(list_box, ("Test 1"));
+    HWND list_box = app_helper::CreateListbox(wnd, cs->hInstance, 0, 
+		ent_list_pos, IDCL_LISTBOX, (""));
+    
+	app_helper::AddString(list_box, ("Test 1"));
     app_helper::AddString(list_box, ("Test 2"));
     app_helper::AddString(list_box, ("Test 3"));
     app_helper::AddString(list_box, ("Test 4"));
 
-    app_helper::CreateStatic(wnd, cs->hInstance, 0, d3d_static_pos, IDC_TEXT_LABEL, ("Direct3D Window goes here."));
+    app_helper::CreateStatic(wnd, cs->hInstance, 0, d3d_static_pos, 
+		IDC_TEXT_LABEL, ("Direct3D Window goes here."));
 
     SetControlFont(group_box, 17, "Consolas", true);
     SetControlFont(list_box, 17, "Consolas");
@@ -191,7 +196,7 @@ void ApplicationFramework::OpenFileDialog()
 void ApplicationFramework::SetControlFont( HWND font_control, int points, const char * font_name, bool is_bold )
 {
     HFONT hFont = NULL;
-    
+   
     if (is_bold) 
     {
          hFont = CreateFont(points, 0, 0, 0, 700,

@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace World_Map_Editor
 {
     public partial class frmMain : Form
     {
         private MapInfo map = new MapInfo();
-        
+        private int maxPanelWidth = 640;
+        private int maxPanelHeight = 480;
+
         public frmMain()
         {
             InitializeComponent();
@@ -23,7 +27,12 @@ namespace World_Map_Editor
             frmMapConfig newMap = new frmMapConfig();
             newMap.ShowDialog(this);
             map = newMap.Map;
+            this.toolStripStatusLabel1.Text = map.mapName;
+            DrawTileGrid();
+        }
 
+        private void DrawTileGrid()
+        {
             int x = 0;
             int y = 0;
             for (int i = 0; i < map.numSpritesWide; i++)
@@ -31,12 +40,12 @@ namespace World_Map_Editor
                 for (int j = 0; j < map.numSpritesHigh; j++)
                 {
                     PictureBox p = new PictureBox();
-                    
+
                     p.Size = map.spriteDimensions;
                     p.BorderStyle = BorderStyle.Fixed3D;
                     p.Location = new Point(j * map.spriteDimensions.Width, x);
                     p.Click += new EventHandler(picture_addImage);
-                    
+
                     this.panel1.Controls.Add(p);
                 }
                 x += map.spriteDimensions.Width;
@@ -57,6 +66,16 @@ namespace World_Map_Editor
                 PictureBox p = (PictureBox)sender;
                 p.Image = new Bitmap(ofd.FileName);
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

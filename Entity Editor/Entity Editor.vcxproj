@@ -57,8 +57,9 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>json_spirit_lib_d.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>C:\Users\Steven\Documents\Visual Studio 2010\Projects\Toolchain\Shared\json_spirit</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,13 +76,15 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>json_spirit_lib.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Steven\Documents\Visual Studio 2010\Projects\Toolchain\Shared\json_spirit</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Shared\AppImpl.cpp" />
     <ClCompile Include="..\Shared\Framework.cpp" />
     <ClCompile Include="..\Shared\Visualisation.cpp" />
+    <ClCompile Include="AboutDialog.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="FilePolicies.cpp" />
   </ItemGroup>
@@ -89,6 +92,7 @@
     <ClInclude Include="..\Shared\AppImpl.h" />
     <ClInclude Include="..\Shared\Framework.h" />
     <ClInclude Include="..\Shared\Visualisation.h" />
+    <ClInclude Include="AboutDialog.h" />
     <ClInclude Include="FileOperations.h" />
     <ClInclude Include="FilePolicies.h" />
     <ClInclude Include="resource.h" />
