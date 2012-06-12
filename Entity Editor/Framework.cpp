@@ -3,63 +3,70 @@
 #include "../Entity Editor/resource.h"
 #include <iostream>
 #include <ShObjIdl.h>
-#include <vector>
 
 #include "../Entity Editor/AboutDialog.h"
 //#define _WIN32_WINNT 0x0700
 
+static std::string current_open_file = "";
+static COMDLG_FILTERSPEC extensions[] = 
+{
+	{L"Json Files (*.json)", L"*.json"},
+	{L"Text Files (*.txt)", L"*.txt"},
+	{L"XML Files (*.xml)", L"*.xml"}
+};
+
 bool ApplicationFramework::Init()
 {
-	assert("ApplicationFramework::Init already performed." && wnd_ == 0);
+    assert("ApplicationFramework::Init already performed." && wnd_ == 0);
 
 
-	WNDCLASS wc;
-	ZeroMemory(&wc, sizeof(WNDCLASS));
+    WNDCLASS wc;
+    ZeroMemory(&wc, sizeof(WNDCLASS));
 
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BTNFACE+1); //0;
-	wc.hCursor = LoadCursor(0, IDC_ARROW);
-	wc.hIcon = 0;
-	wc.hInstance = instance; //::GetModuleHandle(NULL); //0;
-	wc.lpfnWndProc = ApplicationFramework::WndProc;
-	wc.lpszClassName = "entity_editor";
-	wc.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1); //0;
-	wc.style = CS_OWNDC;
+    wc.cbClsExtra = 0;
+    wc.cbWndExtra = 0;
+    wc.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BTNFACE+1); 
+    wc.hCursor = LoadCursor(0, IDC_ARROW);
+    wc.hIcon = 0;
+    wc.hInstance = instance;
+    wc.lpfnWndProc = ApplicationFramework::WndProc;
+    wc.lpszClassName = "entity_editor";
+    wc.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1); 
+    wc.style = CS_OWNDC;
 
-	if (0 == ::RegisterClass(&wc))
-	{
-		std::cerr << "ApplicationFramework::Init Failed; RegisterClass failed." << std::endl;
-		return false;
-	}
+    if (0 == ::RegisterClass(&wc))
+    {
+        std::cerr << "ApplicationFramework::Init Failed; RegisterClass failed." << std::endl;
+        return false;
+    }
 
-	int desktop_width = GetSystemMetrics(SM_CXSCREEN);
-	int desktop_height = GetSystemMetrics(SM_CYSCREEN);
+    int desktop_width = GetSystemMetrics(SM_CXSCREEN);
+    int desktop_height = GetSystemMetrics(SM_CYSCREEN);
 
-	wnd_ = ::CreateWindow(
-		"entity_editor", 
-		"Entity Editor - Steven Gleed",
-		 WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX/* WS_OVERLAPPEDWINDOW*/, 
-		 CW_USEDEFAULT, 
-		 CW_USEDEFAULT, 
-		 CW_USEDEFAULT, 
-		 CW_USEDEFAULT, 
-		 0, 0, 0, 0);
+    wnd_ = ::CreateWindow(
+	    "entity_editor", 
+	    "Entity Editor - Steven Gleed",
+		WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX/* WS_OVERLAPPEDWINDOW*/, 
+		CW_USEDEFAULT, 
+		CW_USEDEFAULT, 
+		CW_USEDEFAULT, 
+		CW_USEDEFAULT, 
+		0, 0, 0, 0);
 
-	if (wnd_ == 0)
-	{
-		std::cerr << "ApplicationFramework::Init Failed; CreateWindow failed." 
-			<< std::endl;
+    if (wnd_ == 0)
+    {
+        std::cerr << "ApplicationFramework::Init Failed; CreateWindow failed." 
+	        << std::endl;
 		
-		return false;
-	}
+        return false;
+    }
 
-	::SetWindowLongPtr(wnd_, GWL_USERDATA, (LONG_PTR)this);
+    ::SetWindowLongPtr(wnd_, GWL_USERDATA, (LONG_PTR)this);
 
     // I do not like this!
-	OnInit(wnd_, (CREATESTRUCT*)this);
+    OnInit(wnd_, (CREATESTRUCT*)this);
 
-	return true;
+    return true;
 }
 
 void ApplicationFramework::Run()
@@ -90,8 +97,8 @@ void ApplicationFramework::Run()
 
 void ApplicationFramework::Shutdown()
 {
-	::DestroyWindow(wnd_);
-	wnd_ = 0;
+    ::DestroyWindow(wnd_);
+    wnd_ = 0;
 }
 
 void ApplicationFramework::OnDraw() 
@@ -100,20 +107,20 @@ void ApplicationFramework::OnDraw()
 
 bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam) 
 { 
-	switch(LOWORD(wParam))
-	{
-	case ID_FILE_OPEN40007:
+    switch(LOWORD(wParam))
+    {
+    case ID_FILE_OPEN40007:
         OpenFileDialog();
         break;
-	case ID_FILE_SAVEAS:
-		OpenSaveDialog();
-		break;
-	case ID_HELP_ABOUT:
-		DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG1), this->wnd_,
-			AboutDialog::AboutDialogProc);
-	}
+    case ID_FILE_SAVEAS:
+        OpenSaveDialog();
+        break;
+    case ID_HELP_ABOUT:
+        DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG1), this->wnd_,
+	        AboutDialog::AboutDialogProc);
+    }
 
-	return true; 
+    return true; 
 }
 
 void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs) 
@@ -123,36 +130,63 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
     RECT ent_list_pos = {675, 35, 125, 200 };
     RECT phs_radio_pos;
     RECT ai_radio_pos;
-    RECT new_btn_pos;
-    RECT remove_btn_pos;
-    RECT clear_btn_pos;
+    RECT new_btn_pos = {675, 300, 125, 35};
+    RECT remove_btn_pos = {675, 340, 125, 35};
+    RECT clear_btn_pos = {675, 380, 125, 35};
 
     HWND group_box = app_helper::CreateButton(
-		wnd, 
-		cs->hInstance, 
-		BS_GROUPBOX|BS_CENTER, 
+	    wnd, 
+	    cs->hInstance, 
+	    BS_GROUPBOX|BS_CENTER, 
         grp_box_pos, 
-		IDC_GROUP_BOX, 
-		("Entity Controls"));
+	    IDC_GROUP_BOX, 
+	    ("Entity Controls"));
     
     HWND list_box = app_helper::CreateListbox(
-		wnd, 
-		cs->hInstance, 
-		0, 
-		ent_list_pos, 
-		IDCL_LISTBOX, 
-		(""));
+	    wnd, 
+	    cs->hInstance, 
+	    0, 
+	    ent_list_pos, 
+	    IDCL_LISTBOX, 
+	    (""));
     
-	app_helper::AddString(list_box, ("Test 1"));
+    app_helper::AddString(list_box, ("Test 1"));
     app_helper::AddString(list_box, ("Test 2"));
     app_helper::AddString(list_box, ("Test 3"));
     app_helper::AddString(list_box, ("Test 4"));
 
+    HWND new_btn = app_helper::CreateButton(
+        wnd, 
+        cs->hInstance,
+        BS_DEFPUSHBUTTON,
+        new_btn_pos,
+        IDBC_PUSHBUTTON,
+        ("Create New Entity"));
+    
+    HWND remove_btn = app_helper::CreateButton(
+        wnd, 
+        cs->hInstance,
+        BS_DEFPUSHBUTTON,
+        remove_btn_pos,
+        IDBC_PUSHBUTTON,
+        ("Remove Entity"));
+        
+    HWND clear_btn = app_helper::CreateButton(
+        wnd, 
+        cs->hInstance,
+        BS_DEFPUSHBUTTON,
+        clear_btn_pos,
+        IDBC_PUSHBUTTON,
+        ("Remove All"));
+
     app_helper::CreateStatic(wnd, cs->hInstance, 0, d3d_static_pos, 
-		IDC_TEXT_LABEL, ("Direct3D Window goes here."));
+	    IDC_TEXT_LABEL, ("Direct3D Window goes here."));
 
     SetControlFont(group_box, 17, "Consolas", true);
     SetControlFont(list_box, 17, "Consolas");
+    SetControlFont(new_btn, 14, "Consolas", true);
+    SetControlFont(remove_btn, 14, "Consolas", true);
+    SetControlFont(clear_btn, 14, "Consolas", true);
 }
 
 void ApplicationFramework::OnUpdate(float time) 
@@ -203,20 +237,10 @@ void ApplicationFramework::OpenFileDialog()
 
     if (SUCCEEDED(hr))
     {
+        IFileDialogEvents *dialog_event = nullptr;
+        file_dialog->SetFileTypes(ARRAYSIZE(extensions), extensions);
+        file_dialog->SetTitle(L"Open Entity");
         file_dialog->Show(this->wnd_);
-        /*IFileDialogEvents *dialog_event = nullptr;
-        hr = CDialogEventHandler_CreateInstance(IID_PPV_ARGS(&dialog_event));*/
-        /* DWORD flags;
-        hr = file_dialog->GetOptions(&flags);
-        if (SUCCEEDED(hr))
-        {
-        hr = file_dialog->SetOptions(flags|FOS_FORCEFILESYSTEM);
-        if (SUCCEEDED(hr))
-        {
-        COMDLG_FILTERSPEC * file_types = new COMDLG_FILTERSPEC[2];
-        hr = file_dialog->SetFileTypes(ARRAYSIZE(file_types), file_types);
-        }
-        }*/
     }
 }
 
@@ -229,20 +253,16 @@ void ApplicationFramework::OpenSaveDialog()
 		CLSCTX_INPROC_SERVER,
 		IID_PPV_ARGS(&save_dialog));
 	
-	// move this.
-	COMDLG_FILTERSPEC extensions[] = 
-	{
-		{L"Json Files (*.json)", L"*.json"}, 
-		{L"Text Files (*.txt)" L"*.txt"}, 
-		{L"XML Files (*.xml)", L"*.xml"}
-	};
-
 	if (SUCCEEDED(hr))
 	{
-		save_dialog->SetFileTypes(ARRAYSIZE(extensions), extensions);
-		save_dialog->SetDefaultExtension(L"json");
-		save_dialog->SetTitle(L"Save Entity");
-		save_dialog->Show(this->wnd_);
+        hr = save_dialog->SetFileTypes(ARRAYSIZE(extensions), extensions);
+        if (SUCCEEDED(hr))
+        {
+		    save_dialog->SetTitle(L"Save Entity");
+		    save_dialog->Show(this->wnd_);
+        }
+        else if (FAILED(hr))
+            OutputDebugString("FAILED");
 	}
 }
 

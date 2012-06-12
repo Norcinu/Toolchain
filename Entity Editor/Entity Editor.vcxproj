@@ -93,6 +93,7 @@
     <ClInclude Include="..\Shared\Framework.h" />
     <ClInclude Include="..\Shared\Visualisation.h" />
     <ClInclude Include="AboutDialog.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="FileOperations.h" />
     <ClInclude Include="FilePolicies.h" />
     <ClInclude Include="resource.h" />

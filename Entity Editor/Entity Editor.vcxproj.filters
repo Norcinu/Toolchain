@@ -25,6 +25,9 @@
     <ClInclude Include="AboutDialog.h">
       <Filter>Application</Filter>
     </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">

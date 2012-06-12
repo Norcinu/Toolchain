@@ -7,14 +7,17 @@
 class ApplicationFramework
 {
 public:
-	ApplicationFramework(HINSTANCE instance_) : wnd_(0), instance(instance_), running(false)
-	{
-	}
+    ApplicationFramework(HINSTANCE instance_) : 
+      wnd_(0), 
+      instance(instance_), 
+      running(false)
+    {
+    }
 	
-	~ApplicationFramework() 
-	{
-		assert("Shutdown not performed." && wnd_ == 0);
-	}
+    ~ApplicationFramework() 
+    {
+	    assert("Shutdown not performed." && wnd_ == 0);
+    }
 
 public:
 	bool Init();
@@ -22,13 +25,13 @@ public:
 	void Shutdown();
 
 private:
-	void  OnDraw();
-	bool  OnEvent(UINT msg, WPARAM wParam, LPARAM lParam);
+    void  OnDraw();
+    bool  OnEvent(UINT msg, WPARAM wParam, LPARAM lParam);
     void  OpenFileDialog();
-	void  OpenSaveDialog();
+    void  OpenSaveDialog();
     void  OnInit(HWND wnd, CREATESTRUCT * cs);
     void  SetControlFont(HWND font_control, int points, const char * font_name, 
-		bool is_bold=false);
+	    bool is_bold=false);
     void  OnUpdate(float time);
 
 private:
@@ -40,18 +43,18 @@ private:
 	bool running;
 
 private:
-	enum
-	{
-		IDC_TEXT_LABEL = 200,
-		IDBC_PUSHBUTTON,
+    enum
+    {
+        IDC_TEXT_LABEL = 200,
+        IDBC_PUSHBUTTON,
         IDBC_AUTOCHECKBOX,
-		IDC_PANEL,
-		IDCL_LISTBOX,
+        IDC_PANEL,
+        IDCL_LISTBOX,
         IDC_GROUP_BOX,
         IDCC_SIMPLE,
         IDCC_DROPDOWN,
         IDCC_DROPDOWNLIST
-	};
+    };
 };
 
 #endif
