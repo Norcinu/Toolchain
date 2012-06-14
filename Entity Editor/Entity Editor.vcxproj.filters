@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="..\Shared\Framework.h">
-      <Filter>Application</Filter>
-    </ClInclude>
     <ClInclude Include="..\Shared\AppImpl.h">
       <Filter>Application</Filter>
     </ClInclude>
@@ -28,6 +25,9 @@
     <ClInclude Include="Entity.h">
       <Filter>Entity</Filter>
     </ClInclude>
+    <ClInclude Include="Framework.h">
+      <Filter>Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -47,9 +47,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Shared\Framework.cpp">
-      <Filter>Application</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="..\Shared\AppImpl.cpp">
       <Filter>Application</Filter>
@@ -62,6 +59,12 @@
     </ClCompile>
     <ClCompile Include="AboutDialog.cpp">
       <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

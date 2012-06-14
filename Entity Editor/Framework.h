@@ -2,7 +2,15 @@
 #define FRAMEWORK_H
 
 #include <Windows.h>
+#include <memory>
 #include <cassert>
+
+class EntityManager;
+class Entity;
+class D3DRenderer;
+
+typedef std::shared_ptr<EntityManager> EntityManagerPtr;
+typedef std::shared_ptr<D3DRenderer> RendererPtr;
 
 class ApplicationFramework
 {
@@ -17,6 +25,7 @@ public:
     ~ApplicationFramework() 
     {
 	    assert("Shutdown not performed." && wnd_ == 0);
+        ::DestroyWindow(wnd_);
     }
 
 public:
@@ -30,23 +39,29 @@ private:
     void  OpenFileDialog();
     void  OpenSaveDialog();
     void  OnInit(HWND wnd, CREATESTRUCT * cs);
-    void  SetControlFont(HWND font_control, int points, const char * font_name, 
-	    bool is_bold=false);
+    void  SetControlFont(HWND font_control, double points, const char * font_name, 
+	    bool is_bold = false);
     void  OnUpdate(float time);
 
 private:
-	static LRESULT WINAPI WndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT WINAPI WndProc(HWND wnd, UINT msg, WPARAM wParam, 
+        LPARAM lParam);
 
 private:
 	HWND wnd_;
 	HINSTANCE instance;
 	bool running;
 
+    EntityManagerPtr entity_manager;
+    RendererPtr renderer;
+
 private:
     enum
     {
         IDC_TEXT_LABEL = 200,
-        IDBC_PUSHBUTTON,
+        IDBC_ADDBUTTON,
+        IDBC_REMOVEBUTTON,
+        IDBC_CLEARBUTTON,
         IDBC_AUTOCHECKBOX,
         IDC_PANEL,
         IDCL_LISTBOX,
@@ -55,6 +70,7 @@ private:
         IDCC_DROPDOWN,
         IDCC_DROPDOWNLIST
     };
+    HWND list_box;
 };
 
 #endif

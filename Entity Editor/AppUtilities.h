@@ -55,24 +55,26 @@ namespace app_helper
 
 	UINT AddString(const HWND listbox, const ustring& message)
 	{
-		return static_cast<UINT>(SendMessage(listbox, LB_ADDSTRING, 0, reinterpret_cast<LPARAM>(
-			message.c_str())));
+		return static_cast<UINT>(SendMessage(listbox, LB_ADDSTRING, 0, 
+            reinterpret_cast<LPARAM>(message.c_str())));
 	}
 
-	HWND CreateListbox(const HWND parent, const HINSTANCE instance, DWORD style, const RECT& rc, 
-		const int id, const ustring& caption)
+	HWND CreateListbox(const HWND parent, const HINSTANCE instance, DWORD style, 
+        const RECT& rc, const int id, const ustring& caption)
 	{
 		style |= WS_CHILD | WS_VISIBLE;
-		return CreateWindowEx(WS_EX_CLIENTEDGE, "listbox", caption.c_str(), style, rc.left, rc.top,
-			rc.right, rc.bottom, parent, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), instance, 0);
+		return CreateWindowEx(WS_EX_CLIENTEDGE, "listbox", caption.c_str(), style, 
+            rc.left, rc.top, rc.right, rc.bottom, parent, 
+            reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), instance, 0);
 	}
 
 	HWND CreateStatic(const HWND parent, const HINSTANCE instance, DWORD style, const RECT& rc, 
 		const int id, const ustring& caption)
 	{
 		style |= WS_CHILD | WS_VISIBLE /*| SS_BLACKFRAME*/;
-		return CreateWindowEx(0, "static", caption.c_str(), style, rc.left, rc.top, rc.right, 
-			rc.bottom, parent, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), instance, 0);
+		return CreateWindowEx(0, "static", caption.c_str(), style, rc.left, rc.top, 
+            rc.right, rc.bottom, parent, 
+            reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), instance, 0);
 	}
 
     HWND CreateButton(const HWND parent, const HINSTANCE instance, DWORD style, const RECT& rc, 

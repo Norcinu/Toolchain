@@ -1,25 +1,31 @@
 #include "Framework.h"
-#include "../Entity Editor/AppUtilities.h"
-#include "../Entity Editor/resource.h"
+#include "AppUtilities.h"
+#include "resource.h"
 #include <iostream>
 #include <ShObjIdl.h>
 
-#include "../Entity Editor/AboutDialog.h"
-//#define _WIN32_WINNT 0x0700
+#include "Entity.h"
+#include "AboutDialog.h"
+#include "Visualisation.h"
 
-static std::string current_open_file = "";
-static COMDLG_FILTERSPEC extensions[] = 
+namespace
 {
-	{L"Json Files (*.json)", L"*.json"},
-	{L"Text Files (*.txt)", L"*.txt"},
-	{L"XML Files (*.xml)", L"*.xml"}
-};
+    int window_height = 600;
+    int window_width = 1024;
+
+    static std::string current_open_file = "";
+    static COMDLG_FILTERSPEC extensions[] = 
+    {
+	    {L"Json Files (*.json)", L"*.json"},
+	    {L"Text Files (*.txt)", L"*.txt"},
+	    {L"XML Files (*.xml)", L"*.xml"}
+    };
+}
 
 bool ApplicationFramework::Init()
 {
     assert("ApplicationFramework::Init already performed." && wnd_ == 0);
-
-
+    
     WNDCLASS wc;
     ZeroMemory(&wc, sizeof(WNDCLASS));
 
@@ -46,11 +52,11 @@ bool ApplicationFramework::Init()
     wnd_ = ::CreateWindow(
 	    "entity_editor", 
 	    "Entity Editor - Steven Gleed",
-		WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX/* WS_OVERLAPPEDWINDOW*/, 
-		CW_USEDEFAULT, 
-		CW_USEDEFAULT, 
-		CW_USEDEFAULT, 
-		CW_USEDEFAULT, 
+		WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX /*| WS_OVERLAPPEDWINDOW*/, 
+		desktop_width / 8, 
+		10/*desktop_height / 4*/, 
+		window_width,//CW_USEDEFAULT, 
+		window_height, 
 		0, 0, 0, 0);
 
     if (wnd_ == 0)
@@ -62,6 +68,9 @@ bool ApplicationFramework::Init()
     }
 
     ::SetWindowLongPtr(wnd_, GWL_USERDATA, (LONG_PTR)this);
+
+    entity_manager = std::make_shared<EntityManager>();
+    renderer = std::make_shared<D3DRenderer>();
 
     // I do not like this!
     OnInit(wnd_, (CREATESTRUCT*)this);
@@ -103,6 +112,11 @@ void ApplicationFramework::Shutdown()
 
 void ApplicationFramework::OnDraw() 
 {
+    if (renderer->GetDevice() != nullptr)
+    {
+        renderer->Begin();
+        renderer->End();
+    }
 }
 
 bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam) 
@@ -118,21 +132,42 @@ bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam)
     case ID_HELP_ABOUT:
         DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG1), this->wnd_,
 	        AboutDialog::AboutDialogProc);
+        break;
+    case IDBC_ADDBUTTON:
+        OutputDebugString("PUSHED BUTTON\n");
+        //entity_manager->Add();
+        break;
+    case IDBC_REMOVEBUTTON:
+        OutputDebugString("REMOVE BUTTON\n");
+        break;
+    case IDBC_CLEARBUTTON:
+        OutputDebugString("CLEAR BUTTON\n");
+        break;
+    case IDCL_LISTBOX:
+        switch (HIWORD(wParam))
+        {
+        case LBN_SELCHANGE:
+            //int selection = (int)SendMessage(this->list_box, LB_GETCURSEL, 0, 0);
+            OutputDebugString("SELECTION CHANGED\n");
+            break;
+        }
+        break;
     }
 
     return true; 
 }
 
 void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs) 
-{
+{   
+    // positions were 675 // group right -> 395 bottom 485
     RECT d3d_static_pos = { 10, 15, 640, 480 };
-    RECT grp_box_pos = { 660, 10, 395, 485 };
+    RECT grp_box_pos = { 660, 10, 285, 285 };
     RECT ent_list_pos = {675, 35, 125, 200 };
-    RECT phs_radio_pos;
-    RECT ai_radio_pos;
-    RECT new_btn_pos = {675, 300, 125, 35};
-    RECT remove_btn_pos = {675, 340, 125, 35};
-    RECT clear_btn_pos = {675, 380, 125, 35};
+    RECT phs_radio_pos = {800, 155, 125, 35};
+    RECT ai_radio_pos = {800, 185, 125, 35};
+    RECT new_btn_pos = {800, 35, 125, 35};
+    RECT remove_btn_pos = {800, 75, 125, 35};
+    RECT clear_btn_pos = {800, 115, 125, 35};
 
     HWND group_box = app_helper::CreateButton(
 	    wnd, 
@@ -142,7 +177,7 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
 	    IDC_GROUP_BOX, 
 	    ("Entity Controls"));
     
-    HWND list_box = app_helper::CreateListbox(
+    list_box = app_helper::CreateListbox(
 	    wnd, 
 	    cs->hInstance, 
 	    0, 
@@ -160,7 +195,7 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
         cs->hInstance,
         BS_DEFPUSHBUTTON,
         new_btn_pos,
-        IDBC_PUSHBUTTON,
+        IDBC_ADDBUTTON,
         ("Create New Entity"));
     
     HWND remove_btn = app_helper::CreateButton(
@@ -168,7 +203,7 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
         cs->hInstance,
         BS_DEFPUSHBUTTON,
         remove_btn_pos,
-        IDBC_PUSHBUTTON,
+        IDBC_REMOVEBUTTON,
         ("Remove Entity"));
         
     HWND clear_btn = app_helper::CreateButton(
@@ -176,17 +211,28 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
         cs->hInstance,
         BS_DEFPUSHBUTTON,
         clear_btn_pos,
-        IDBC_PUSHBUTTON,
+        IDBC_CLEARBUTTON,//IDBC_ADDBUTTON,
         ("Remove All"));
 
-    app_helper::CreateStatic(wnd, cs->hInstance, 0, d3d_static_pos, 
-	    IDC_TEXT_LABEL, ("Direct3D Window goes here."));
+    HWND d3d_label = app_helper::CreateStatic(wnd, cs->hInstance, 0, d3d_static_pos, 
+	    IDC_TEXT_LABEL, ("D3D Window goes here."));
 
-    SetControlFont(group_box, 17, "Consolas", true);
-    SetControlFont(list_box, 17, "Consolas");
-    SetControlFont(new_btn, 14, "Consolas", true);
-    SetControlFont(remove_btn, 14, "Consolas", true);
-    SetControlFont(clear_btn, 14, "Consolas", true);
+    if (!renderer->Init(d3d_label, 320, 240))
+        OutputDebugString("ERROR LOADING DX11\n");
+
+    app_helper::CreateButton(wnd, cs->hInstance, BS_RADIOBUTTON, 
+        ai_radio_pos, IDBC_AUTOCHECKBOX, ("Has AI?"));
+
+    app_helper::CreateButton(wnd, cs->hInstance, BS_RADIOBUTTON, 
+        phs_radio_pos, IDBC_AUTOCHECKBOX, ("Has Physics?"));
+
+    // add static to display information of current entity.
+
+    //SetControlFont(group_box, 17, "Consolas", true);
+    //SetControlFont(list_box, 17, "Consolas");
+    //SetControlFont(new_btn, 10.5, "Microsoft Sans Serif", true);
+    //SetControlFont(remove_btn, 10.5, "Consolas", true);
+    //SetControlFont(clear_btn, 14, "Consolas", true);
 }
 
 void ApplicationFramework::OnUpdate(float time) 
@@ -258,15 +304,15 @@ void ApplicationFramework::OpenSaveDialog()
         hr = save_dialog->SetFileTypes(ARRAYSIZE(extensions), extensions);
         if (SUCCEEDED(hr))
         {
-		    save_dialog->SetTitle(L"Save Entity");
-		    save_dialog->Show(this->wnd_);
+            save_dialog->SetTitle(L"Save Entity");
+            save_dialog->Show(this->wnd_);
         }
         else if (FAILED(hr))
             OutputDebugString("FAILED");
 	}
 }
 
-void ApplicationFramework::SetControlFont( HWND font_control, int points, 
+void ApplicationFramework::SetControlFont( HWND font_control, double points, 
 	const char * font_name, bool is_bold )
 {
     HFONT hFont = NULL;
