@@ -93,7 +93,8 @@ void ApplicationFramework::Run()
 	long start_time = ::timeGetTime();
 	while (running)
 	{
-		while (::GetMessage(&msg,0,0,0))
+		//while (::GetMessage(&msg,0,0,0))
+        while (::PeekMessage(&msg, 0, 0, 0, PM_REMOVE) != 0)
 		{
 			::TranslateMessage( &msg );
 			::DispatchMessage( &msg );
@@ -124,10 +125,10 @@ bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam)
     switch(LOWORD(wParam))
     {
     case ID_FILE_OPEN40007:
-        OpenFileDialog();
+        OpenFileDialog(IOFileType::TEXT);
         break;
     case ID_FILE_SAVEAS:
-        OpenSaveDialog();
+        OpenSaveDialog(IOFileType::TEXT);
         break;
     case ID_HELP_ABOUT:
         DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG1), this->wnd_,
@@ -272,7 +273,7 @@ LRESULT CALLBACK ApplicationFramework::WndProc(HWND wnd, UINT msg, WPARAM wParam
 // move this and OpenSaveDialog() into one method, maybe determine which
 // to open by add a function pointer.
 // perhaps a function to configure the appropriate dialog too.
-void ApplicationFramework::OpenFileDialog()
+void ApplicationFramework::OpenFileDialog(const IOFileType ft)
 {
     IFileDialog *file_dialog = nullptr;
     HRESULT hr = CoCreateInstance(
@@ -290,7 +291,7 @@ void ApplicationFramework::OpenFileDialog()
     }
 }
 
-void ApplicationFramework::OpenSaveDialog()
+void ApplicationFramework::OpenSaveDialog(const IOFileType ft)
 {
 	IFileSaveDialog * save_dialog = nullptr;
 	HRESULT hr = CoCreateInstance(

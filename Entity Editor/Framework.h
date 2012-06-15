@@ -12,6 +12,14 @@ class D3DRenderer;
 typedef std::shared_ptr<EntityManager> EntityManagerPtr;
 typedef std::shared_ptr<D3DRenderer> RendererPtr;
 
+enum IOFileType
+{
+    TEXT = 1,
+    JSON,
+    XML,
+    IMAGE
+};
+
 class ApplicationFramework
 {
 public:
@@ -36,8 +44,8 @@ public:
 private:
     void  OnDraw();
     bool  OnEvent(UINT msg, WPARAM wParam, LPARAM lParam);
-    void  OpenFileDialog();
-    void  OpenSaveDialog();
+    void  OpenFileDialog(const IOFileType ft);
+    void  OpenSaveDialog(const IOFileType ft);
     void  OnInit(HWND wnd, CREATESTRUCT * cs);
     void  SetControlFont(HWND font_control, double points, const char * font_name, 
 	    bool is_bold = false);

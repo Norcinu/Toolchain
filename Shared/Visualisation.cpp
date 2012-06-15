@@ -124,7 +124,6 @@ void D3DRenderer::Begin()
 {
     float clearColour[4] = {0.0f, 0.125f, 0.3f, 1.0f};
     deviceContext->ClearRenderTargetView(renderTargetView, clearColour);
-    OutputDebugString("begin");
 }
 
 void D3DRenderer::End()

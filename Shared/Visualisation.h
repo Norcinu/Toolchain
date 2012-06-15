@@ -40,6 +40,7 @@ public:
     void DrawAll();
     void DrawText();
     void Shutdown();
+    void CalculateFPS();
 
     ID3D11Device * GetDevice() const { return d3d_device; }
     WindowInfoPtr GetWindowInfo() const { return info; }
