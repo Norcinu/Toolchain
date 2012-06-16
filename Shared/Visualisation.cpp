@@ -1,29 +1,18 @@
 #include "Visualisation.h"
+#include "WindowInfo.h"
+#include "DxImpl.h"
+#include "Utils.h"
 
 D3D_DRIVER_TYPE g_driverType = D3D_DRIVER_TYPE_NULL;
 D3D_FEATURE_LEVEL g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 D3DRenderer::D3DRenderer() :
-    info(new WindowInfo),
-    swapChain(nullptr),
-    d3d_device(nullptr),
-    deviceContext(nullptr),
-    renderTargetView(nullptr),
-    depthStencilBuffer(nullptr),
-    depthStencilState(nullptr),
-    depthStencilView(nullptr),
-    rasterState(nullptr) {}
+    info(new RendererInfo),
+    dximpl(new DxImpl) {}
 
-D3DRenderer::D3DRenderer(const WindowInfoPtr infoCopy) :
+D3DRenderer::D3DRenderer(const RendererInfoPtr infoCopy) :
     info(infoCopy),
-    swapChain(nullptr),
-    d3d_device(nullptr),
-    deviceContext(nullptr),
-    renderTargetView(nullptr),
-    depthStencilBuffer(nullptr),
-    depthStencilState(nullptr),
-    depthStencilView(nullptr),
-    rasterState(nullptr) {}
+    dximpl(new DxImpl) {}
 
 D3DRenderer::~D3DRenderer()
 {
@@ -59,18 +48,18 @@ bool D3DRenderer::Init(HWND wnd, const int width, const int height)
 
     UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
-    ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
-    swapChainDesc.BufferCount = 1;
-    swapChainDesc.BufferDesc.Width = info->windowWidth;
-    swapChainDesc.BufferDesc.Height = info->windowHeight;
-    swapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-    swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-    swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-    swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    swapChainDesc.OutputWindow = wnd;
-    swapChainDesc.SampleDesc.Count = 1;
-    swapChainDesc.SampleDesc.Quality = 0;
-    swapChainDesc.Windowed = TRUE;
+    ZeroMemory(&dximpl->swapChainDesc, sizeof(dximpl->swapChainDesc));
+    dximpl->swapChainDesc.BufferCount = 1;
+    dximpl->swapChainDesc.BufferDesc.Width = info->windowWidth;
+    dximpl->swapChainDesc.BufferDesc.Height = info->windowHeight;
+    dximpl->swapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+    dximpl->swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+    dximpl->swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+    dximpl->swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    dximpl->swapChainDesc.OutputWindow = wnd;
+    dximpl->swapChainDesc.SampleDesc.Count = 1;
+    dximpl->swapChainDesc.SampleDesc.Quality = 0;
+    dximpl->swapChainDesc.Windowed = TRUE;
 
     HRESULT result = S_OK;
     for (auto index = 0; index < numDriverTypes; index++)
@@ -83,11 +72,11 @@ bool D3DRenderer::Init(HWND wnd, const int width, const int height)
             featureLevels,
             numFeatureLevels,
             D3D11_SDK_VERSION,
-            &swapChainDesc,
-            &swapChain,
-            &d3d_device,
+            &dximpl->swapChainDesc,
+            &dximpl->swapChain,
+            &dximpl->d3d_device,
             &g_featureLevel,
-            &deviceContext);
+            &dximpl->deviceContext);
 
         if (SUCCEEDED(result))
             break;
@@ -97,16 +86,20 @@ bool D3DRenderer::Init(HWND wnd, const int width, const int height)
         return false;
 
     ID3D11Texture2D* backBuffer = nullptr;
-    result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
+    result = dximpl->swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), 
+        (LPVOID*)&backBuffer);
+    
     if (FAILED(result))
         return false;
 
-    result = d3d_device->CreateRenderTargetView(backBuffer, NULL, &renderTargetView);
+    result = dximpl->d3d_device->CreateRenderTargetView(backBuffer, 
+        NULL, &dximpl->renderTargetView);
+
     backBuffer->Release();
     if (FAILED(result))
         return false;
 
-    deviceContext->OMSetRenderTargets(1, &renderTargetView, NULL);
+    dximpl->deviceContext->OMSetRenderTargets(1, &dximpl->renderTargetView, NULL);
 
     D3D11_VIEWPORT vp;
     vp.Width = (FLOAT)info->windowWidth;
@@ -115,22 +108,63 @@ bool D3DRenderer::Init(HWND wnd, const int width, const int height)
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
-    deviceContext->RSSetViewports(1, &vp);
+    dximpl->deviceContext->RSSetViewports(1, &vp);
 
     return true;
 }
 
+ID3D11Device* D3DRenderer::GetDevice() const 
+{
+    return dximpl->d3d_device;
+}
+
 void D3DRenderer::Begin()
 {
+#ifdef _DEBUG
+    CalculateFPS();
+#endif
+
     float clearColour[4] = {0.0f, 0.125f, 0.3f, 1.0f};
-    deviceContext->ClearRenderTargetView(renderTargetView, clearColour);
+    dximpl->deviceContext->ClearRenderTargetView(
+        dximpl->renderTargetView, clearColour);
 }
 
 void D3DRenderer::End()
 {
-    swapChain->Present(0, 0);
+    dximpl->swapChain->Present(0, 0);
 }
 
 void D3DRenderer::Shutdown()
 {
+    if (dximpl->deviceContext)
+    {
+        dximpl->deviceContext->ClearState();
+        dximpl->deviceContext->Release();
+    }
+
+    if (dximpl->renderTargetView)
+        dximpl->renderTargetView->Release();
+    if (dximpl->swapChain)
+        dximpl->swapChain->Release();
+    if (dximpl->d3d_device)
+        dximpl->d3d_device->Release();
+}
+
+void D3DRenderer::CalculateFPS() 
+{  
+    static auto lastTime = timeGetTime();
+    static auto frames = 0;
+    static auto fps = 0;
+
+    auto newTime = timeGetTime();
+
+    if (newTime - lastTime > 1000)
+    {
+        auto newFPS = (frames * 1000 / (newTime - lastTime));
+        std::string str = utils::str::ToString<unsigned long>(newFPS) + "\n";
+        OutputDebugString(str.c_str());
+        lastTime = newTime;
+        frames = 0;
+    }
+    frames++;
 }

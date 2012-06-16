@@ -28,6 +28,15 @@
     <ClInclude Include="Framework.h">
       <Filter>Application</Filter>
     </ClInclude>
+    <ClInclude Include="..\Shared\DxImpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\WindowInfo.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Utils.h">
+      <Filter>Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">

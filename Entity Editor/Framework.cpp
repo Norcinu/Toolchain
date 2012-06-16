@@ -125,10 +125,10 @@ bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam)
     switch(LOWORD(wParam))
     {
     case ID_FILE_OPEN40007:
-        OpenFileDialog(IOFileType::TEXT);
+        OpenFileDialog(TEXT);
         break;
     case ID_FILE_SAVEAS:
-        OpenSaveDialog(IOFileType::TEXT);
+        OpenSaveDialog(TEXT);
         break;
     case ID_HELP_ABOUT:
         DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG1), this->wnd_,
