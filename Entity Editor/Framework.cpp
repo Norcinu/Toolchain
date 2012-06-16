@@ -20,6 +20,14 @@ namespace
 	    {L"Text Files (*.txt)", L"*.txt"},
 	    {L"XML Files (*.xml)", L"*.xml"}
     };
+
+    static COMDLG_FILTERSPEC gfx_extensions[] = 
+    {
+        {L"Bitmap Files (*.bmp)", L"*.bmp"},
+        {L"PNG Files (*.png)", L"*.png"},
+        {L"Targa Files (*.tga)", L"*.tga"},
+        {L"3D Object Files (*.obj)", L"*.obj"}
+    };
 }
 
 bool ApplicationFramework::Init()
@@ -285,7 +293,15 @@ void ApplicationFramework::OpenFileDialog(const IOFileType ft)
     if (SUCCEEDED(hr))
     {
         IFileDialogEvents *dialog_event = nullptr;
-        file_dialog->SetFileTypes(ARRAYSIZE(extensions), extensions);
+        switch (ft)
+        {
+        case TEXT:
+            file_dialog->SetFileTypes(ARRAYSIZE(extensions), extensions);
+            break;
+        case IMAGE:
+            file_dialog->SetFileTypes(ARRAYSIZE(gfx_extensions), gfx_extensions);
+        }
+            
         file_dialog->SetTitle(L"Open Entity");
         file_dialog->Show(this->wnd_);
     }
@@ -302,7 +318,16 @@ void ApplicationFramework::OpenSaveDialog(const IOFileType ft)
 	
 	if (SUCCEEDED(hr))
 	{
-        hr = save_dialog->SetFileTypes(ARRAYSIZE(extensions), extensions);
+        switch (ft)
+        {
+        case TEXT:
+            hr = save_dialog->SetFileTypes(ARRAYSIZE(extensions), extensions);
+            break;
+        case IMAGE:
+            hr = save_dialog->SetFileTypes(ARRAYSIZE(gfx_extensions), gfx_extensions);
+            break;
+        }
+       
         if (SUCCEEDED(hr))
         {
             save_dialog->SetTitle(L"Save Entity");
@@ -313,7 +338,7 @@ void ApplicationFramework::OpenSaveDialog(const IOFileType ft)
 	}
 }
 
-void ApplicationFramework::SetControlFont( HWND font_control, double points, 
+void ApplicationFramework::SetControlFont( HWND font_control, int points, 
 	const char * font_name, bool is_bold )
 {
     HFONT hFont = NULL;

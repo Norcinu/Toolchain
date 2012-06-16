@@ -5,8 +5,8 @@
 #include <memory>
 #include <cassert>
 
+struct Entity;
 class EntityManager;
-class Entity;
 class D3DRenderer;
 
 typedef std::shared_ptr<EntityManager> EntityManagerPtr;
@@ -47,7 +47,7 @@ private:
     void  OpenFileDialog(const IOFileType ft);
     void  OpenSaveDialog(const IOFileType ft);
     void  OnInit(HWND wnd, CREATESTRUCT * cs);
-    void  SetControlFont(HWND font_control, double points, const char * font_name, 
+    void  SetControlFont(HWND font_control, int points, const char * font_name, 
 	    bool is_bold = false);
     void  OnUpdate(float time);
 
