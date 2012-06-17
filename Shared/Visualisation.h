@@ -26,7 +26,7 @@ public:
     void Shutdown();
     void CalculateFPS();
 
-    ID3D11Device * GetDevice() const; // { return dximpl->d3d_device; }
+    ID3D11Device * GetDevice() const;
     RendererInfoPtr GetWindowInfo() const { return info; }
 
 private:

@@ -37,8 +37,9 @@ public:
     EntityManager();
     ~EntityManager();
 
-    bool Add(const Entity::entity_ptr ent);
-    bool Remove(const Entity::entity_ptr ent);
+    void Add(const Entity::entity_ptr ent);
+    void Remove(const int index);
+    size_t GetSize() const { return entities.size(); }
 
 private:
     std::vector<Entity::entity_ptr> entities;

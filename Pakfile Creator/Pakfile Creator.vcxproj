@@ -65,15 +65,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Shared\tinyxml\tinystr.cpp" />
-    <ClCompile Include="..\Shared\tinyxml\tinyxml.cpp" />
-    <ClCompile Include="..\Shared\tinyxml\tinyxmlerror.cpp" />
-    <ClCompile Include="..\Shared\tinyxml\tinyxmlparser.cpp" />
     <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Shared\tinyxml\tinystr.h" />
-    <ClInclude Include="..\Shared\tinyxml\tinyxml.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,11 +1,11 @@
 #include <iostream>
-#include "tinyxml\tinyxml.h"
+#include "rapidxml\rapidxml.hpp"
 
 int main()
 {
-	TiXmlDocument doc;
+	/*TiXmlDocument doc;
 	if (!doc.LoadFile("file.xml"))
-		std::cout << "couldnt find file" << std::endl;
+		std::cout << "couldnt find file" << std::endl;*/
 
 	std::cin.get();
 }

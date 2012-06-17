@@ -3,10 +3,13 @@
 #include "resource.h"
 #include <iostream>
 #include <ShObjIdl.h>
+#include <string>
+#include <functional>
 
 #include "Entity.h"
 #include "AboutDialog.h"
 #include "Visualisation.h"
+#include "Utils.h"
 
 namespace
 {
@@ -29,6 +32,14 @@ namespace
         {L"3D Object Files (*.obj)", L"*.obj"}
     };
 }
+
+struct GetSizeFunctor {
+    void operator()(std::string& msg, size_t size) {      
+        std::string conversion = utils::str::ToString<size_t>(size);
+        msg.append(conversion.begin(), conversion.end());
+        OutputDebugString(msg.c_str());   
+    }
+};
 
 bool ApplicationFramework::Init()
 {
@@ -144,10 +155,12 @@ bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam)
         break;
     case IDBC_ADDBUTTON:
         OutputDebugString("PUSHED BUTTON\n");
+        CreateEntity();
         //entity_manager->Add();
         break;
     case IDBC_REMOVEBUTTON:
         OutputDebugString("REMOVE BUTTON\n");
+        RemoveEntity(selection);
         break;
     case IDBC_CLEARBUTTON:
         OutputDebugString("CLEAR BUTTON\n");
@@ -156,7 +169,7 @@ bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam)
         switch (HIWORD(wParam))
         {
         case LBN_SELCHANGE:
-            //int selection = (int)SendMessage(this->list_box, LB_GETCURSEL, 0, 0);
+            selection = (int)SendMessage(this->list_box, LB_GETCURSEL, 0, 0);
             OutputDebugString("SELECTION CHANGED\n");
             break;
         }
@@ -194,10 +207,10 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
 	    IDCL_LISTBOX, 
 	    (""));
     
-    app_helper::AddString(list_box, ("Test 1"));
+   /* app_helper::AddString(list_box, ("Test 1"));
     app_helper::AddString(list_box, ("Test 2"));
     app_helper::AddString(list_box, ("Test 3"));
-    app_helper::AddString(list_box, ("Test 4"));
+    app_helper::AddString(list_box, ("Test 4"));*/
 
     HWND new_btn = app_helper::CreateButton(
         wnd, 
@@ -372,4 +385,35 @@ void ApplicationFramework::SetControlFont( HWND font_control, int points,
     }
    
     SendMessage(font_control, WM_SETFONT, WPARAM (hFont), TRUE);
+}
+
+void ApplicationFramework::UpdateAll() {
+
+}
+
+void ApplicationFramework::CreateEntity() {
+    Entity::entity_ptr ent = std::make_shared<Entity>();
+    ent->name = "Entity " + utils::str::ToString<size_t>(entity_manager->GetSize());
+    entity_manager->Add(ent);
+
+#ifdef _DEBUG
+    OutputDebugString(ent->name.c_str()); 
+    OutputDebugString("\n");
+#endif
+}
+
+void ApplicationFramework::RemoveEntity(const int index) {
+#ifdef _DEBUG
+    size_t size = entity_manager->GetSize();
+    GetSizeFunctor gsf;
+    std::function<void (std::string&, size_t)> f(gsf);
+    f(std::string("Size before deletion "), size);
+#endif
+
+    entity_manager->Remove(index);
+
+#ifdef _DEBUG
+    size = entity_manager->GetSize();
+    f(std::string("Size after deletion "), size);
+#endif
 }

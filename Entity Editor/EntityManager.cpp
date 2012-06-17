@@ -1,4 +1,6 @@
 #include "Entity.h"
+#include <cassert>
+#include <algorithm>
 
 EntityManager::EntityManager()
 {
@@ -8,12 +10,23 @@ EntityManager::~EntityManager()
 {
 }
 
-bool EntityManager::Add(const Entity::entity_ptr ent)
+void 
+    EntityManager::Add(const Entity::entity_ptr ent)
 {
-    return true;
+    assert (ent != nullptr);
+    entities.push_back(ent);
 }
 
-bool EntityManager::Remove(const Entity::entity_ptr ent)
+void EntityManager::Remove(const int index)
 {
-    return true;
+    assert (index > 0 && index < entities.size());
+    
+    /*int ctr = 0;
+    auto result = std::find_if(entities.begin(), entities.end(), 
+        [&ctr, &index] () -> bool {
+            if (index == ctr) return true;
+            else return false;
+        });*/
+    
+    entities.erase(entities.begin() + index);
 }

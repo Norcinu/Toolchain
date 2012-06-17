@@ -26,6 +26,7 @@ public:
     ApplicationFramework(HINSTANCE instance_) : 
       wnd_(0), 
       instance(instance_), 
+      selection(0),
       running(false)
     {
     }
@@ -50,6 +51,10 @@ private:
     void  SetControlFont(HWND font_control, int points, const char * font_name, 
 	    bool is_bold = false);
     void  OnUpdate(float time);
+    void  CreateEntity();
+    void  RemoveEntity(const int index);
+    int   GetCurrentListSelection() const { return selection; }
+    void  UpdateAll();
 
 private:
 	static LRESULT WINAPI WndProc(HWND wnd, UINT msg, WPARAM wParam, 
@@ -59,6 +64,7 @@ private:
 	HWND wnd_;
 	HINSTANCE instance;
 	bool running;
+    int selection;
 
     EntityManagerPtr entity_manager;
     RendererPtr renderer;
