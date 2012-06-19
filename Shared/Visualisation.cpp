@@ -121,7 +121,7 @@ ID3D11Device* D3DRenderer::GetDevice() const
 void D3DRenderer::Begin()
 {
 #ifdef _DEBUG
-    CalculateFPS();
+    //CalculateFPS();
 #endif
 
     float clearColour[4] = {0.0f, 0.125f, 0.3f, 1.0f};

@@ -39,7 +39,11 @@ public:
 
     void Add(const Entity::entity_ptr ent);
     void Remove(const int index);
+    
     size_t GetSize() const { return entities.size(); }
+    Entity::entity_ptr GetSelection(const int index) const {
+        return entities[index];
+    }
 
 private:
     std::vector<Entity::entity_ptr> entities;

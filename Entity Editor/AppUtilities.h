@@ -92,6 +92,14 @@ namespace app_helper
         return CreateWindowEx(0,"combobox", caption.c_str(), style, rc.left, rc.top, rc.right,
             rc.bottom, parent, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), instance, 0); 
     }
+
+    HWND CreateEditBox(const HWND parent, const HINSTANCE instance, DWORD style, const RECT& rc,
+        const int id, const ustring& caption)
+    {
+        style |= WS_CHILD | WS_VISIBLE;
+        return CreateWindowEx(WS_EX_CLIENTEDGE, "edit", caption.c_str(), style, rc.left, rc.top, rc.right,
+            rc.bottom, parent, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), instance, 0);
+    }
 };
 
 #endif

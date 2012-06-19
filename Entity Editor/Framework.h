@@ -73,6 +73,7 @@ private:
     enum
     {
         IDC_TEXT_LABEL = 200,
+        ID_SINGLELINE,
         IDBC_ADDBUTTON,
         IDBC_REMOVEBUTTON,
         IDBC_CLEARBUTTON,

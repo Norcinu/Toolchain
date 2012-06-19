@@ -37,6 +37,7 @@ struct GetSizeFunctor {
     void operator()(std::string& msg, size_t size) {      
         std::string conversion = utils::str::ToString<size_t>(size);
         msg.append(conversion.begin(), conversion.end());
+        msg += "\n";
         OutputDebugString(msg.c_str());   
     }
 };
@@ -112,7 +113,6 @@ void ApplicationFramework::Run()
 	long start_time = ::timeGetTime();
 	while (running)
 	{
-		//while (::GetMessage(&msg,0,0,0))
         while (::PeekMessage(&msg, 0, 0, 0, PM_REMOVE) != 0)
 		{
 			::TranslateMessage( &msg );
@@ -132,7 +132,7 @@ void ApplicationFramework::Shutdown()
 
 void ApplicationFramework::OnDraw() 
 {
-    if (renderer->GetDevice() != nullptr)
+    //if (renderer->GetDevice() != nullptr)
     {
         renderer->Begin();
         renderer->End();
@@ -156,7 +156,6 @@ bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam)
     case IDBC_ADDBUTTON:
         OutputDebugString("PUSHED BUTTON\n");
         CreateEntity();
-        //entity_manager->Add();
         break;
     case IDBC_REMOVEBUTTON:
         OutputDebugString("REMOVE BUTTON\n");
@@ -182,14 +181,20 @@ bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam)
 void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs) 
 {   
     // positions were 675 // group right -> 395 bottom 485
-    RECT d3d_static_pos = { 10, 15, 640, 480 };
-    RECT grp_box_pos = { 660, 10, 285, 285 };
-    RECT ent_list_pos = {675, 35, 125, 200 };
+    RECT d3d_static_pos = {10, 15, 640, 480};
+    RECT grp_box_pos = {660, 10, 285, 350}; // 285
+    RECT ent_list_pos = {675, 35, 125, 200};
     RECT phs_radio_pos = {800, 155, 125, 35};
     RECT ai_radio_pos = {800, 185, 125, 35};
     RECT new_btn_pos = {800, 35, 125, 35};
     RECT remove_btn_pos = {800, 75, 125, 35};
     RECT clear_btn_pos = {800, 115, 125, 35};
+    RECT ent_txt_name = {800, 235, 125, 25};
+    RECT ent_txt_pos = {800, 265, 125, 25}; 
+    RECT ent_txt_side = {800, 295, 125, 25};
+    RECT ent_lbl_name = {675, 235, 125, 25};
+    RECT ent_lbl_pos = {675, 265, 125, 25};
+    RECT ent_lbl_side = {675, 295, 125, 25};
 
     HWND group_box = app_helper::CreateButton(
 	    wnd, 
@@ -247,6 +252,24 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
 
     app_helper::CreateButton(wnd, cs->hInstance, BS_RADIOBUTTON, 
         phs_radio_pos, IDBC_AUTOCHECKBOX, ("Has Physics?"));
+
+    app_helper::CreateEditBox(wnd, cs->hInstance, 0, ent_txt_name, 
+        ID_SINGLELINE, (""));
+    
+    app_helper::CreateEditBox(wnd, cs->hInstance, 0, ent_txt_pos, 
+        ID_SINGLELINE, (""));
+    
+    app_helper::CreateEditBox(wnd, cs->hInstance, 0, ent_txt_side, 
+        ID_SINGLELINE, (""));
+
+    app_helper::CreateStatic(wnd, cs->hInstance, 0, ent_lbl_name,
+        IDC_TEXT_LABEL, ("Entity name:"));
+
+    app_helper::CreateStatic(wnd, cs->hInstance, 0, ent_lbl_pos,
+        IDC_TEXT_LABEL, ("Entity position:"));
+
+    app_helper::CreateStatic(wnd, cs->hInstance, 0, ent_lbl_side,
+        IDC_TEXT_LABEL, ("Entity side:"));
 
     // add static to display information of current entity.
 
@@ -406,14 +429,24 @@ void ApplicationFramework::RemoveEntity(const int index) {
 #ifdef _DEBUG
     size_t size = entity_manager->GetSize();
     GetSizeFunctor gsf;
-    std::function<void (std::string&, size_t)> f(gsf);
-    f(std::string("Size before deletion "), size);
+    std::function<void (std::string&, size_t)> func(gsf);
+    func(std::string("Size before deletion "), size);
 #endif
 
-    entity_manager->Remove(index);
+  entity_manager->Remove(index);
 
 #ifdef _DEBUG
-    size = entity_manager->GetSize();
-    f(std::string("Size after deletion "), size);
+    size = entity_manager->GetSize(); 
+    std::string msg = "Size after deletion ";
+    
+    auto funcPrint = [&size, &msg]() {
+        std::string conversion = utils::str::ToString<size_t>(size);
+        msg.append(conversion.begin(), conversion.end());
+        msg += "\n";
+        OutputDebugString(msg.c_str());
+    };
+
+    funcPrint();
+    //func(std::string("Size after deletion "), size);
 #endif
 }
