@@ -13,12 +13,6 @@
     <ClInclude Include="..\Shared\Visualisation.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="FileOperations.h">
-      <Filter>File operations</Filter>
-    </ClInclude>
-    <ClInclude Include="FilePolicies.h">
-      <Filter>File operations</Filter>
-    </ClInclude>
     <ClInclude Include="AboutDialog.h">
       <Filter>Application</Filter>
     </ClInclude>
@@ -37,6 +31,18 @@
     <ClInclude Include="..\Shared\Utils.h">
       <Filter>Application</Filter>
     </ClInclude>
+    <ClInclude Include="BaseFile.h">
+      <Filter>File operations</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser.h">
+      <Filter>File operations</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseFileType.h">
+      <Filter>File operations</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicEntity.h">
+      <Filter>Graphics\Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -54,6 +60,12 @@
     <Filter Include="File operations">
       <UniqueIdentifier>{e272be18-619a-4bda-8e96-ed50361fec2b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{af783305-1c38-4d62-93fe-af777cac6f00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Entity">
+      <UniqueIdentifier>{57baa3cb-d211-4b9e-becb-76357bb083b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -63,9 +75,6 @@
     <ClCompile Include="..\Shared\Visualisation.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="FilePolicies.cpp">
-      <Filter>File operations</Filter>
-    </ClCompile>
     <ClCompile Include="AboutDialog.cpp">
       <Filter>Application</Filter>
     </ClCompile>
@@ -74,6 +83,15 @@
     </ClCompile>
     <ClCompile Include="EntityManager.cpp">
       <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser.cpp">
+      <Filter>File operations</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseFile.cpp">
+      <Filter>File operations</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseFileType.cpp">
+      <Filter>File operations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,8 +2,10 @@
 #define FRAMEWORK_H
 
 #include <Windows.h>
+#include <WindowsX.h>
 #include <memory>
 #include <cassert>
+#include<vector>
 
 struct Entity;
 class EntityManager;
@@ -55,6 +57,8 @@ private:
     void  RemoveEntity(const int index);
     int   GetCurrentListSelection() const { return selection; }
     void  UpdateAll();
+    void SetEditText(HWND hwnd, std::string& msg);
+    std::string GetEditText(HWND hwnd) const;
 
 private:
 	static LRESULT WINAPI WndProc(HWND wnd, UINT msg, WPARAM wParam, 
@@ -74,6 +78,9 @@ private:
     {
         IDC_TEXT_LABEL = 200,
         ID_SINGLELINE,
+        ID_EDIT_NAME,
+        ID_EDIT_POSITION,
+        ID_EDIT_SIDE,
         IDBC_ADDBUTTON,
         IDBC_REMOVEBUTTON,
         IDBC_CLEARBUTTON,
@@ -86,6 +93,11 @@ private:
         IDCC_DROPDOWNLIST
     };
     HWND list_box;
+    typedef std::pair<HWND, RECT> EditPair;
+    std::vector<EditPair> editBoxes;
+    std::pair<HWND, RECT> txtEntityName;
+    std::pair<HWND, RECT> txtEntityPos;
+    std::pair<HWND, RECT> txtEntitySide;
 };
 
 #endif

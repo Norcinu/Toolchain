@@ -15,6 +15,7 @@ struct Entity
     float z;
     std::string name;
     std::string graphic_name;
+    std::string side;
 
     Entity() : 
         has_physics(false),
@@ -24,7 +25,8 @@ struct Entity
         y(0),
         z(0),
         name(""),
-        graphic_name("") {}
+        graphic_name(""),
+        side("") {}
 
     ~Entity() {}
 

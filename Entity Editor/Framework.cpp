@@ -42,6 +42,12 @@ struct GetSizeFunctor {
     }
 };
 
+typedef struct GetSelectionFunctor {
+    int operator()() {
+        return 1;
+    }
+} GetSelection;
+
 bool ApplicationFramework::Init()
 {
     assert("ApplicationFramework::Init already performed." && wnd_ == 0);
@@ -91,6 +97,7 @@ bool ApplicationFramework::Init()
 
     entity_manager = std::make_shared<EntityManager>();
     renderer = std::make_shared<D3DRenderer>();
+    
 
     // I do not like this!
     OnInit(wnd_, (CREATESTRUCT*)this);
@@ -155,6 +162,8 @@ bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam)
         break;
     case IDBC_ADDBUTTON:
         OutputDebugString("PUSHED BUTTON\n");
+        if (!renderer->LoadTexture("Em1.jpg"))
+            return false;
         CreateEntity();
         break;
     case IDBC_REMOVEBUTTON:
@@ -168,13 +177,13 @@ bool ApplicationFramework::OnEvent(UINT msg, WPARAM wParam, LPARAM lParam)
         switch (HIWORD(wParam))
         {
         case LBN_SELCHANGE:
-            selection = (int)SendMessage(this->list_box, LB_GETCURSEL, 0, 0);
+            selection = (int)SendMessage(list_box, LB_GETCURSEL, 0, 0);
             OutputDebugString("SELECTION CHANGED\n");
             break;
         }
         break;
     }
-
+    
     return true; 
 }
 
@@ -207,16 +216,11 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
     list_box = app_helper::CreateListbox(
 	    wnd, 
 	    cs->hInstance, 
-	    0, 
+        LBS_NOTIFY|LBS_WANTKEYBOARDINPUT, 
 	    ent_list_pos, 
 	    IDCL_LISTBOX, 
 	    (""));
     
-   /* app_helper::AddString(list_box, ("Test 1"));
-    app_helper::AddString(list_box, ("Test 2"));
-    app_helper::AddString(list_box, ("Test 3"));
-    app_helper::AddString(list_box, ("Test 4"));*/
-
     HWND new_btn = app_helper::CreateButton(
         wnd, 
         cs->hInstance,
@@ -253,14 +257,17 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
     app_helper::CreateButton(wnd, cs->hInstance, BS_RADIOBUTTON, 
         phs_radio_pos, IDBC_AUTOCHECKBOX, ("Has Physics?"));
 
-    app_helper::CreateEditBox(wnd, cs->hInstance, 0, ent_txt_name, 
+    HWND en = app_helper::CreateEditBox(wnd, cs->hInstance, 0, ent_txt_name, 
         ID_SINGLELINE, (""));
-    
-    app_helper::CreateEditBox(wnd, cs->hInstance, 0, ent_txt_pos, 
+    txtEntityName = std::make_pair(en, ent_txt_name);
+
+    HWND ep = app_helper::CreateEditBox(wnd, cs->hInstance, 0, ent_txt_pos, 
         ID_SINGLELINE, (""));
-    
-    app_helper::CreateEditBox(wnd, cs->hInstance, 0, ent_txt_side, 
+    txtEntityPos = std::make_pair(ep, ent_txt_pos);
+
+    HWND es = app_helper::CreateEditBox(wnd, cs->hInstance, 0, ent_txt_side, 
         ID_SINGLELINE, (""));
+    txtEntitySide = std::make_pair(es, ent_txt_side);
 
     app_helper::CreateStatic(wnd, cs->hInstance, 0, ent_lbl_name,
         IDC_TEXT_LABEL, ("Entity name:"));
@@ -276,7 +283,7 @@ void ApplicationFramework::OnInit(HWND wnd, CREATESTRUCT * cs)
     //SetControlFont(group_box, 17, "Consolas", true);
     //SetControlFont(list_box, 17, "Consolas");
     //SetControlFont(new_btn, 10.5, "Microsoft Sans Serif", true);
-    //SetControlFont(remove_btn, 10.5, "Consolas", true);
+    //SetControlFont(remove_btn, 16, "Consolas", true);
     //SetControlFont(clear_btn, 14, "Consolas", true);
 }
 
@@ -411,14 +418,38 @@ void ApplicationFramework::SetControlFont( HWND font_control, int points,
 }
 
 void ApplicationFramework::UpdateAll() {
+    //SendMessage(wnd, 
+    //LPSTR buffer;
+    //Edit_GetText(txtEntityName.first, buffer, 1024);
+}
 
+void ApplicationFramework::SetEditText(HWND hwnd, std::string& msg) {
+    Edit_SetText(hwnd, (LPSTR)msg.c_str());
+}
+
+std::string ApplicationFramework::GetEditText(HWND hwnd) const {
+    int length = Edit_GetTextLength(hwnd);
+    LPSTR buffer = "";
+    Edit_GetText(hwnd, buffer, length);
+#ifdef _DEBUG 
+    // check this!!!!
+    OutputDebugString(*buffer + "\n");
+#endif
+    return std::move(std::string(buffer));
 }
 
 void ApplicationFramework::CreateEntity() {
     Entity::entity_ptr ent = std::make_shared<Entity>();
     ent->name = "Entity " + utils::str::ToString<size_t>(entity_manager->GetSize());
+   
+    app_helper::AddString(list_box, ent->name);
     entity_manager->Add(ent);
-
+    SetEditText(txtEntityName.first, std::string(ent->name));
+    std::string x = utils::str::ToString<float>(ent->x);
+    std::string y = utils::str::ToString<float>(ent->y);
+    std::string position = x + ", " + y;
+    SetEditText(txtEntityPos.first, position);
+    //SetEditText(txtEntitySide.first, ent->side);
 #ifdef _DEBUG
     OutputDebugString(ent->name.c_str()); 
     OutputDebugString("\n");
@@ -434,7 +465,10 @@ void ApplicationFramework::RemoveEntity(const int index) {
 #endif
 
   entity_manager->Remove(index);
-
+  //auto F = [selection]() {
+  //};
+  SendMessage(list_box, LB_DELETESTRING, 0, (LPARAM)selection+1);
+  
 #ifdef _DEBUG
     size = entity_manager->GetSize(); 
     std::string msg = "Size after deletion ";

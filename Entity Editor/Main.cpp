@@ -1,8 +1,8 @@
 #include <Windows.h>
 #include "Framework.h"
-#include "FilePolicies.h"
-#include "FileOperations.h"
-#include <json_spirit\json_spirit.h>
+//#include "FilePolicies.h"
+//#include "FileOperations.h"
+//#include <json_spirit\json_spirit.h>
 #include <iostream>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -15,6 +15,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		app.Shutdown();
 	}
 
+#if 0
 	std::ifstream is("package.json");
 	json_spirit::mValue v;
 	
@@ -34,6 +35,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     std::vector<Entity*> ents;
     TextFileAppend test;
     test.Run("test.txt", ents);
-    
+#endif
+
     return 0;
 }

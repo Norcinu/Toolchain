@@ -24,10 +24,6 @@ void EntityManager::Add(const Entity::entity_ptr ent)
 
 void EntityManager::Remove(const int index)
 {
-   // assert (index > 0 && index < (int)entities.size());
-    
-    if (index == 0)
-        return;
-    
+    assert (index >= 0 && index < (int)entities.size());    
     entities.erase(entities.begin() + index);
 }

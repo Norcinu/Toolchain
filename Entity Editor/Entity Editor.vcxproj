@@ -84,10 +84,12 @@
     <ClCompile Include="..\Shared\AppImpl.cpp" />
     <ClCompile Include="..\Shared\Visualisation.cpp" />
     <ClCompile Include="AboutDialog.cpp" />
+    <ClCompile Include="BaseFile.cpp" />
+    <ClCompile Include="BaseFileType.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="FilePolicies.cpp" />
+    <ClCompile Include="Parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Shared\AppImpl.h" />
@@ -96,9 +98,11 @@
     <ClInclude Include="..\Shared\Visualisation.h" />
     <ClInclude Include="..\Shared\WindowInfo.h" />
     <ClInclude Include="AboutDialog.h" />
+    <ClInclude Include="BaseFile.h" />
+    <ClInclude Include="BaseFileType.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="FileOperations.h" />
-    <ClInclude Include="FilePolicies.h" />
+    <ClInclude Include="GraphicEntity.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="AppUtilities.h" />
